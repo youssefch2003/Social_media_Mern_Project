@@ -2,43 +2,42 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
     {
-        firstName : {
+        firstName: {
             type: String,
             required: true,
-            min: 2,
-            max: 50,
-        },
-        lastName : {
+            minlength: 2,
+            maxlength: 50,
+          },
+          lastName: {
             type: String,
             required: true,
-            min: 2,
-            max: 50,
-        },
-        email : {
+            minlength: 2,
+            maxlength: 50,
+          },
+          email: {
             type: String,
             required: true,
-            max: 50,
-            unique:true
-        },
-        password : {
+            maxlength: 50,
+            unique: true,
+          },
+          password: {
             type: String,
             required: true,
-            min: 5,
-        },
-        picture : {
+            minlength: 5,
+          },
+          picture: {
             type: String,
-            default:"",
-
-        },
-        friends : {
+            default: '',
+          },
+          friends: {
             type: [String],
-            default:[],
-
-        },
-        location: String,
-        occupation: String,
-        viewdProfile: Number,
-        impressions: Number,
+            default: [],
+          },
+          location: String,
+          occupation: String,
+          viewedProfile: Number,
+          impressions: Number
+    
 
       
 
