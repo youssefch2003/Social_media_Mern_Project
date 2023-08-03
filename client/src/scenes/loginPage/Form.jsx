@@ -30,7 +30,7 @@ const registerSchema = yup.object().shape({
 })
 
 const loginSchema = yup.object().shape({
-    email: yup.string().required("required"),
+    email: yup.string().email("invalide emailll").required("required"),
     password:yup.string().required("required"),
 
 })
@@ -51,7 +51,7 @@ const initialValuesLogin = {
 };
 const Form = ()=> {
     const [pageType, setPageType]= useState("login");
-    const {palette } = useTheme();
+    const { palette } = useTheme();
     const dispatch = useDispatch();
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType ==="login";
@@ -61,12 +61,13 @@ const Form = ()=> {
     // REGISTERRR
     const register = async (values, onSubmitProp)=> {
         // this allows us to send form info with image 
+        console.log("Register function called", values);
         const formData = new FormData();
-        console.log(formData);
         for(let value in values  ){
-            formData.append(values, values[value])
+            formData.append(value, values[value])
         }
         formData.append('picturePath', values.picture.name);
+        console.log(formData);
         const savedUserResponse = await fetch(
             "http://localhost:3001/auth/register",
             {
@@ -82,11 +83,12 @@ const Form = ()=> {
     };
       // LOGIN
       const login = async (values, onSubmitProp)=> {
+        console.log("Login function called");
         const LoggedInResponse = await fetch(
             "http://localhost:3001/auth/login",
             {
                 method: "POST",
-                headers: { "Content-Type": "appliction/json" },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
             }
         );
@@ -103,14 +105,14 @@ const Form = ()=> {
         }
 
       }
-    const handleFormSubmit = async (values, onSubmitProp)=>{
+    const handleFormSubmit = async (values, onSubmitProp) => {
         if(isLogin) await login(values, onSubmitProp);
-        if(isRegister) await register(values, onSubmitProp);
+        if(!isLogin) await register(values, onSubmitProp);
     };
     return (
         <Formik onSubmit={handleFormSubmit}
-        initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
-        validationSchema={isLogin ? loginSchema : registerSchema}
+        initialValues = {isLogin ? initialValuesLogin : initialValuesRegister}
+        validationSchema= {isLogin ? loginSchema : registerSchema}
         >
         {({ 
             values,
@@ -123,7 +125,9 @@ const Form = ()=> {
             resetForm,
 
 
-        })=>(
+        })=>{
+            // console.log("Formik onSubmit prop:", handleSubmit);
+            return (
             <form onSubmit={handleSubmit}>
                 <Box 
                 display="grid"
@@ -187,7 +191,7 @@ const Form = ()=> {
                             {({ getRootProps, getInputProps})=>(
                                 <Box
                                 {...getRootProps()}
-                                border={`2px dashed ${palette.primary.main}`}
+                                border={`2px dashed ${themeSetting.palette.primary.main}`}
                                 p="1rem"
                                 sx = {{ "&:hover": { cursor: "pointer" } }}
                                 >
@@ -237,9 +241,9 @@ const Form = ()=> {
                     sx={{
                         m: "2rem 0",
                         p: "1rem",
-                        backgroundColor: palette.primary.main,
-                        color: palette.background.alt,
-                        "&:hover": { color: palette.primary.main },
+                        backgroundColor: themeSetting.palette.primary.main,
+                        color: themeSetting.palette.background.alt,
+                        "&:hover": { color: themeSetting.palette.primary.main },
                         }}
                     >
                         {isLogin ? "LOGIN": "REGISTER"}
@@ -264,10 +268,10 @@ const Form = ()=> {
 
                 </Box>
 
-            </form>
-        )}
+            </form>3.30
+        )}}
 
         </Formik>
     )
 }
-export default Form; 3:30:59 
+export default Form; 
